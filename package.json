@@ -1,0 +1,27 @@
+{
+  "name": "bamazon",
+  "version": "1.0.0",
+  "description": "create bamazon site using mysql and node.js",
+  "main": "bamazonCustomer.js",
+  "scripts": {
+    "test": "download mysql and inquirer npm prior to running the program"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/whchan167/Bamazon.git"
+  },
+  "keywords": [
+    "mysql",
+    "inquirer"
+  ],
+  "author": "wen chan",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/whchan167/Bamazon/issues"
+  },
+  "homepage": "https://github.com/whchan167/Bamazon#readme",
+  "dependencies": {
+    "inquirer": "^3.0.1",
+    "mysql": "^2.13.0"
+  }
+}
