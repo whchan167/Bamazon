@@ -65,16 +65,21 @@ function buyQuestion(){
 	
 //function to check inventory 
  function inventCheck(id, qty){
- 	var query = "SELECT product_name, product_sales, stock_quantity, price FROM products WHERE ?"
+ 	var query = "SELECT * FROM products WHERE ?"
  	connection.query(query, {item_id: id}, function(err, res){
  		//if error occurs, shows "err"
  		if (err) throw err;
 
+ 		//create variable to deduct item qty from inventory
  		var newstock = res[0].stock_quantity - parseInt(qty);
+
+ 		//variable to store new product sales for this item 
  		var newProSale = res[0].product_sales + parseInt(qty) * res[0].price;
+ 		
  		//if stock_quantity is larger than quantity requested, tell 
  		//buyer successfully to buy the quantity needed and update inventory
  		if (res[0].stock_quantity > parseInt(qty)) {
+ 			totalSales(res[0].department_name, newProSale);
  			updateInv(id, newstock);
  			updateSale(id, newProSale);
  			console.log("You successfully purchased " + qty + " " + res[0].product_name + "\nYour total is: " + res[0].price * qty);
@@ -82,6 +87,7 @@ function buyQuestion(){
  		}
  		//buyer purchase the last quantity in the inventory as a reminder; 
  		else if (res[0].stock_quantity === parseInt(qty)) {
+ 			totalSales(res[0].department_name, newProSale);
  			updateInv(id, newstock);
  			updateSale(id, newProSale);
  			console.log("You are lucky to get last " + qty + " " + res[0].product_name + "\nYour total is: " + res[0].price * qty);
@@ -110,21 +116,21 @@ function buyQuestion(){
  	});
 	};
 
-//function totalSales(){
-	//var query = "SELECT * FROM products";
-	//connection.query(query, function(err, res){
-		//for (var i=0; i<res.length; i++){
-			//if (res[i].department_name === "phone"){
-				//var TphoneSales += res[i].product_sales;
-				//console.log(TphoneSales);
-			//}
-			//else if (res[i].department_name === "gaming"){
-				//var TgamingSales += res[i].product.sales;
-			//}
-		//};
-	//});
+function totalSales(dept, sale){
+	var query = "SELECT * FROM departments where ?";
+	connection.query(query, {department_name: dept}, function(err, res){
+		console.log(dept);
+		var totalSales = parseInt(sale) + res[0].total_sales;
+		console.log(totalSales);
+		updatedept(res[0].department_name, totalSales);
+	});
+};
 
-
+function updatedept(dept, Sales){
+	var query = "UPDATE departments SET ? where ?"
+	connection.query(query, [{total_sales: Sales}, {department_name: dept}], function(err, res){
+	});
+	};
 
 
 

@@ -18,8 +18,8 @@ CREATE TABLE departments (
 department_id INTEGER(11) AUTO_INCREMENT NOT NULL
 , department_name VARCHAR(100) NULL
 , over_head_costs DECIMAL(10,2) NULL
-, total_sales DECIMAL(10,2) NULL
-, total_profit DECIMAL(10,2)
+, total_sales INTEGER(11) NULL
+, total_profit INTEGER(11)
 , PRIMARY KEY (department_id)
 );
 

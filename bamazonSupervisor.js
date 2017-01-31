@@ -72,11 +72,10 @@ function createDep(){
 	}
 	]).then(function(answer){
 		var query = "INSERT INTO departments SET ?";
-		var prompt = {departments_name: answer.depName, over_head_costs: answer.overhead}
+		var prompt = {department_name: answer.depName, over_head_costs: answer.overhead}
 		connection.query(query, prompt, function(err, res){
-			console.log(res);
 			console.log("New department is creating. Please wait......");
-		})
+		});
 		setTimeout(runMenu, 1000*30);
 	});
 }
