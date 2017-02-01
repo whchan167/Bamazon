@@ -73,25 +73,29 @@ function buyQuestion(){
  		//create variable to deduct item qty from inventory
  		var newstock = res[0].stock_quantity - parseInt(qty);
 
- 		//variable to store new product sales for this item 
+ 		//variable to store the product sale revenue for this transaction
+ 		var prodRev = parseInt(qty) * res[0].price  
+
+ 		//variable to store total revenue for this item 
  		var newProSale = res[0].product_sales + parseInt(qty) * res[0].price;
+
  		
  		//if stock_quantity is larger than quantity requested, tell 
  		//buyer successfully to buy the quantity needed and update inventory
  		if (res[0].stock_quantity > parseInt(qty)) {
- 			totalSales(res[0].department_name, newProSale);
  			updateInv(id, newstock);
  			updateSale(id, newProSale);
  			console.log("You successfully purchased " + qty + " " + res[0].product_name + "\nYour total is: " + res[0].price * qty);
- 			connection.end();
+ 			totalSales(res[0].department_name, prodRev);
+ 			//connection.end();
  		}
  		//buyer purchase the last quantity in the inventory as a reminder; 
  		else if (res[0].stock_quantity === parseInt(qty)) {
- 			totalSales(res[0].department_name, newProSale);
  			updateInv(id, newstock);
  			updateSale(id, newProSale);
  			console.log("You are lucky to get last " + qty + " " + res[0].product_name + "\nYour total is: " + res[0].price * qty);
- 			connection.end();
+ 			totalSales(res[0].department_name, prodRev);
+ 			//connection.end();
  		}
  		//tell buyer that inventory quantity is insufficient, try to buy remaining quantity if available
  		else if (res[0].stock_quantity < parseInt(qty)){
@@ -119,18 +123,15 @@ function buyQuestion(){
 function totalSales(dept, sale){
 	var query = "SELECT * FROM departments where ?";
 	connection.query(query, {department_name: dept}, function(err, res){
-		console.log(dept);
-		var totalSales = parseInt(sale) + res[0].total_sales;
+		var totalSales = sale + res[0].total_sales;
+		var totalProfit = totalSales - res[0].over_head_costs;
+		console.log(totalProfit);
 		console.log(totalSales);
-		updatedept(res[0].department_name, totalSales);
+		connection.query("UPDATE departments SET ? where ?", [{total_sales: totalSales}, {department_name: dept}], function(err, res){});
+		connection.query("UPDATE departments SET ? where ?", [{total_profit: totalProfit}, {department_name: dept}], function(err, res){});
+		connection.end();
 	});
 };
-
-function updatedept(dept, Sales){
-	var query = "UPDATE departments SET ? where ?"
-	connection.query(query, [{total_sales: Sales}, {department_name: dept}], function(err, res){
-	});
-	};
 
 
 

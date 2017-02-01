@@ -18,8 +18,22 @@ var connection = mysql.createConnection({
 //Display all sale items available
 connection.connect(function(err){
 	if (err) throw err;
-	runMenu();
+	departTable();
+	setTimeout(runMenu, 1000);
 });
+
+function departTable(){
+	//query all data from the departments table in mysql
+connection.query("SELECT * FROM departments", function(err, res){
+	console.log("------------------------------------");
+	//log available items and display id number, product name and price of the item
+	console.log(" department_id||department_name||over_head_costs||total_sales||total_profits||");
+	for (var i = 0; i < res.length; i++) {
+	console.log("  " + res[i].department_id + " | " + res[i].department_name + " | " + res[i].over_head_costs + " | " + res[i].total_sales + " | " + res[i].total_profits);
+	}
+	console.log("------------------------------------");
+});
+};
 
 //Display menu options
 function runMenu(){
@@ -50,7 +64,7 @@ function prodDep(){
 		console.log(res)
 
 	});
-	setTimeout(runMenu, 1000*3);
+	setTimeout(runMenu, 1000);
 };
 
 function createDep(){

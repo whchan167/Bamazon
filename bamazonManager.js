@@ -20,6 +20,7 @@ connection.connect(function(err){
 	if (err) throw err;
 	runMenu();
 });
+fun
 	
 function runMenu(){
 	inquirer.prompt(
